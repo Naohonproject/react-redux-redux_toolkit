@@ -1,24 +1,20 @@
-const initState = [
-  { id: 1, name: "Redux-core", completed: false, priority: "Medium" },
-  { id: 2, name: "React", completed: true, priority: "Medium" },
-];
+import { createSlice } from "@reduxjs/toolkit";
 
-const todoListReducer = (state = initState, action) => {
-  const { type, payload } = action;
-  switch (type) {
-    case "todoList/addTodo":
-      return [...state, payload];
-    case "todoList/toggleTodoStatus": {
-      return state.map((todo) => {
-        if (todo.id === payload) {
-          return { ...todo, completed: !todo.completed };
-        }
-        return todo;
-      });
-    }
-    default:
-      return state;
-  }
-};
-
-export default todoListReducer;
+export default createSlice({
+  name: "todoList",
+  initialState: [
+    { id: 1, name: "Redux-core", completed: false, priority: "Medium" },
+    { id: 2, name: "React", completed: true, priority: "Medium" },
+  ],
+  reducers: {
+    addTodo: (state, action) => {
+      state.push(action.payload);
+    },
+    toggleTodoStatus: (state, action) => {
+      const currentTodo = state.find((todo) => todo.id === action.payload);
+      if (currentTodo) {
+        currentTodo.completed = !currentTodo.completed;
+      }
+    },
+  },
+});
